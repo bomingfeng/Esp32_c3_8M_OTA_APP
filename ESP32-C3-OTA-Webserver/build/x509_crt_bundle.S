@@ -1,4 +1,4 @@
-/* * Data converted from C:/ESP/Project/esp32_c3_8M_OTA/ESP32-C3-OTA-Webserver/build/esp-idf/mbedtls/x509_crt_bundle
+/* * Data converted from C:/ESP/Project/Esp32_c3_8M_OTA_APP/ESP32-C3-OTA-Webserver/build/esp-idf/mbedtls/x509_crt_bundle
  */
 .data
 .section .rodata.embedded

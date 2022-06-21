@@ -1,4 +1,4 @@
-/* * Data converted from C:/ESP/Project/esp32_c3_16M_OTA/OTA_WEBSERVER_APP_8m/main/WebsiteFiles/index.html
+/* * Data converted from C:/ESP/Project/Esp32_c3_8M_OTA_APP/OTA_WEBSERVER_APP_Air_conditioner_controller/main/WebsiteFiles/index.html
  * (null byte appended)
  */
 .data

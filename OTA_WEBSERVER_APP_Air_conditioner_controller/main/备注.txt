@@ -116,3 +116,36 @@ ir_ps_data[11] = 0xaa;//BIT3显示置位
 ir_ps_data[12] = 0x19;
 总关机 、
 */
+
+
+
+
+ir_ps_data[0] = 0x50;
+ir_ps_data[1] = 0x00;
+ir_ps_data[2] = 0x0a;
+ir_ps_data[3] = 0x41;
+ir_ps_data[4] = 0xa0;
+ir_ps_data[5] = 0x00;
+ir_ps_data[6] = 0x40;
+ir_ps_data[7] = 0x11;
+ir_ps_data[8] = 0x00;
+ir_ps_data[9] = 0x00;
+ir_ps_data[10] = 0x00;
+ir_ps_data[11] = 0x00;
+ir_ps_data[12] = 0x00;
+onoff:0;ir_time_off:500min;IR_temp:2650 C
+I (8942) OTA: Reboot Command, Restarting
+retry to connect to the AP.(4 / 100)
+tx_buffer[0] = 0x50;
+tx_buffer[1] = 0x30;
+tx_buffer[2] = 0xc;
+tx_buffer[3] = 0x51;
+tx_buffer[4] = 0x80;
+tx_buffer[5] = 0x0;
+tx_buffer[6] = 0x0;
+tx_buffer[7] = 0x11;
+tx_buffer[8] = 0x0;
+tx_buffer[9] = 0x0;
+tx_buffer[10] = 0x0;
+tx_buffer[11] = 0x0;
+tx_buffer[12] = 0x0;

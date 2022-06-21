@@ -34,7 +34,7 @@ endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for each subdirectory.
-  include("C:/ESP/Project/esp32_c3_8M_OTA/ESP32-C3-OTA-Webserver/build/bootloader/esp-idf/cmake_install.cmake")
+  include("C:/ESP/Project/Esp32_c3_8M_OTA_APP/ESP32-C3-OTA-Webserver/build/bootloader/esp-idf/cmake_install.cmake")
 
 endif()
 
@@ -46,5 +46,5 @@ endif()
 
 string(REPLACE ";" "\n" CMAKE_INSTALL_MANIFEST_CONTENT
        "${CMAKE_INSTALL_MANIFEST_FILES}")
-file(WRITE "C:/ESP/Project/esp32_c3_8M_OTA/ESP32-C3-OTA-Webserver/build/bootloader/${CMAKE_INSTALL_MANIFEST}"
+file(WRITE "C:/ESP/Project/Esp32_c3_8M_OTA_APP/ESP32-C3-OTA-Webserver/build/bootloader/${CMAKE_INSTALL_MANIFEST}"
      "${CMAKE_INSTALL_MANIFEST_CONTENT}")

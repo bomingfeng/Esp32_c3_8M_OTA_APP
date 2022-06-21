@@ -543,9 +543,25 @@ void tempps_task(void *arg)
                         ir_ps_data[11] = 0x00;
                         ir_ps_data[12] = 0x00;
                         28开机，关灯,风速自动
+
+
+                        ir_ps_data[0] = 0x50;
+                        ir_ps_data[1] = 0x00;
+                        ir_ps_data[2] = 0x0a;
+                        ir_ps_data[3] = 0x41;
+                        ir_ps_data[4] = 0xa0;
+                        ir_ps_data[5] = 0x00;
+                        ir_ps_data[6] = 0x40;
+                        ir_ps_data[7] = 0x11;
+                        ir_ps_data[8] = 0x00;
+                        ir_ps_data[9] = 0x00;
+                        ir_ps_data[10] = 0x00;
+                        ir_ps_data[11] = 0x00;
+                        ir_ps_data[12] = 0x00;
+                        28开机，关灯,风速自动。左右上下扫风开
                     */
-                    ir_ps_data[0] = 0x50;ir_ps_data[1] = 0x00;ir_ps_data[2] = 0x0c;ir_ps_data[3] = 0x49;
-                    ir_ps_data[4] = 0x00;ir_ps_data[5] = 0x00;ir_ps_data[6] = 0x00;ir_ps_data[7] = 0x10;
+                    ir_ps_data[0] = 0x50;ir_ps_data[1] = 0x00;ir_ps_data[2] = 0x0a;ir_ps_data[3] = 0x41;
+                    ir_ps_data[4] = 0xa0;ir_ps_data[5] = 0x00;ir_ps_data[6] = 0x40;ir_ps_data[7] = 0x11;
 #endif                   
 
 #ifdef  Auxgroup     
@@ -784,9 +800,24 @@ void tempps_task(void *arg)
                         ir_ps_data[11] = 0x00;
                         ir_ps_data[12] = 0x00;
                         28开机，关灯,风速自动
+
+                        ir_ps_data[0] = 0x50;
+                        ir_ps_data[1] = 0x00;
+                        ir_ps_data[2] = 0x0a;
+                        ir_ps_data[3] = 0x41;
+                        ir_ps_data[4] = 0xa0;
+                        ir_ps_data[5] = 0x00;
+                        ir_ps_data[6] = 0x40;
+                        ir_ps_data[7] = 0x11;
+                        ir_ps_data[8] = 0x00;
+                        ir_ps_data[9] = 0x00;
+                        ir_ps_data[10] = 0x00;
+                        ir_ps_data[11] = 0x00;
+                        ir_ps_data[12] = 0x00;
+                        28开机，关灯,风速自动。左右上下扫风开
                     */
-                    ir_ps_data[0] = 0x50;ir_ps_data[1] = 0x00;ir_ps_data[2] = 0x0c;ir_ps_data[3] = 0x49;
-                    ir_ps_data[4] = 0x00;ir_ps_data[5] = 0x00;ir_ps_data[6] = 0x00;ir_ps_data[7] = 0x10;
+                    ir_ps_data[0] = 0x50;ir_ps_data[1] = 0x00;ir_ps_data[2] = 0x0a;ir_ps_data[3] = 0x41;
+                    ir_ps_data[4] = 0xa0;ir_ps_data[5] = 0x00;ir_ps_data[6] = 0x40;ir_ps_data[7] = 0x11;
 #endif  
 
 #ifdef  Auxgroup     
