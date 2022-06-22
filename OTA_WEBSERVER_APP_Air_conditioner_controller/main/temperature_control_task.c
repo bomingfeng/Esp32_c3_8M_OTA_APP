@@ -202,37 +202,37 @@ void IRps_task(void *arg)
                 switch (IR_temp)
                 {
                     case 0:
-                        IR_temp = 1750; //1600
+                        IR_temp = 2690; //1600
                         break;
                     case 1:
-                        IR_temp = 1840; //1700
+                        IR_temp = 2690; //1700
                         break;
                     case 2:
-                        IR_temp = 1930; //1800
+                        IR_temp = 2690; //1800
                         break;
                     case 3:
-                        IR_temp = 2020; //1900
+                        IR_temp = 2690; //1900
                         break;
                     case 4:
-                        IR_temp = 2110; //2000
+                        IR_temp = 2690; //2000
                         break;
                     case 5:
-                        IR_temp = 2200; //2100
+                        IR_temp = 2690; //2100
                         break;
                     case 6:
-                        IR_temp = 2290; //2200
+                        IR_temp = 2690; //2200
                         break;
                     case 7:
-                        IR_temp = 2380;
+                        IR_temp = 2690;
                         break;
                     case 8:
-                        IR_temp = 2470;
+                        IR_temp = 2690;
                         break;
                     case 9:
-                        IR_temp = 2560;
+                        IR_temp = 2690;
                         break;
                     case 10:
-                        IR_temp = 2650;
+                        IR_temp = 2690;
                         break;
                     case 11:
                         IR_temp = 2730;
@@ -548,8 +548,8 @@ void tempps_task(void *arg)
                         ir_ps_data[0] = 0x50;
                         ir_ps_data[1] = 0x00;
                         ir_ps_data[2] = 0x0a;
-                        ir_ps_data[3] = 0x41;
-                        ir_ps_data[4] = 0xa0;
+                        ir_ps_data[3] = 0x49;
+                        ir_ps_data[4] = 0x20;
                         ir_ps_data[5] = 0x00;
                         ir_ps_data[6] = 0x40;
                         ir_ps_data[7] = 0x11;
@@ -558,10 +558,10 @@ void tempps_task(void *arg)
                         ir_ps_data[10] = 0x00;
                         ir_ps_data[11] = 0x00;
                         ir_ps_data[12] = 0x00;
-                        28开机，关灯,风速自动。左右上下扫风开
+                        26开机，关灯,风速自动。左右上下扫风开
                     */
-                    ir_ps_data[0] = 0x50;ir_ps_data[1] = 0x00;ir_ps_data[2] = 0x0a;ir_ps_data[3] = 0x41;
-                    ir_ps_data[4] = 0xa0;ir_ps_data[5] = 0x00;ir_ps_data[6] = 0x40;ir_ps_data[7] = 0x11;
+                    ir_ps_data[0] = 0x50;ir_ps_data[1] = 0x00;ir_ps_data[2] = 0x0a;ir_ps_data[3] = 0x49;
+                    ir_ps_data[4] = 0x20;ir_ps_data[5] = 0x00;ir_ps_data[6] = 0x40;ir_ps_data[7] = 0x11;
 #endif                   
 
 #ifdef  Auxgroup     
@@ -804,8 +804,8 @@ void tempps_task(void *arg)
                         ir_ps_data[0] = 0x50;
                         ir_ps_data[1] = 0x00;
                         ir_ps_data[2] = 0x0a;
-                        ir_ps_data[3] = 0x41;
-                        ir_ps_data[4] = 0xa0;
+                        ir_ps_data[3] = 0x49;
+                        ir_ps_data[4] = 0x20;
                         ir_ps_data[5] = 0x00;
                         ir_ps_data[6] = 0x40;
                         ir_ps_data[7] = 0x11;
@@ -814,10 +814,10 @@ void tempps_task(void *arg)
                         ir_ps_data[10] = 0x00;
                         ir_ps_data[11] = 0x00;
                         ir_ps_data[12] = 0x00;
-                        28开机，关灯,风速自动。左右上下扫风开
+                        26开机，关灯,风速自动。左右上下扫风开
                     */
-                    ir_ps_data[0] = 0x50;ir_ps_data[1] = 0x00;ir_ps_data[2] = 0x0a;ir_ps_data[3] = 0x41;
-                    ir_ps_data[4] = 0xa0;ir_ps_data[5] = 0x00;ir_ps_data[6] = 0x40;ir_ps_data[7] = 0x11;
+                    ir_ps_data[0] = 0x50;ir_ps_data[1] = 0x00;ir_ps_data[2] = 0x0a;ir_ps_data[3] = 0x49;
+                    ir_ps_data[4] = 0x20;ir_ps_data[5] = 0x00;ir_ps_data[6] = 0x40;ir_ps_data[7] = 0x11;
 #endif  
 
 #ifdef  Auxgroup     

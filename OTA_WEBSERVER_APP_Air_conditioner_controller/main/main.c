@@ -77,6 +77,8 @@ void app_main()
 
     LED_Task_init();
     xTaskCreate(led_instructions, "led_instructions", 4596, NULL, ESP_TASK_PRIO_MIN + 1, NULL);
+    //extern void ledc_pwm_Task(void *pvParam);
+    //xTaskCreate(ledc_pwm_Task, "ledc_pwm_Task", 4596, NULL, ESP_TASK_PRIO_MIN + 1, NULL);
 
 	MyWiFi_init();
     xTaskCreate(wifi_ap_sta, "wifi_ap_sta", 2048, NULL, ESP_TASK_PRIO_MIN + 1, NULL);
@@ -96,7 +98,10 @@ void app_main()
     tempps_task_init();
     xTaskCreate(IRps_task,"IRps_task",  3072, NULL, ESP_TASK_PRIO_MIN + 2,NULL);
     xTaskCreate(tempps_task,"tempps",  3072, NULL, ESP_TASK_PRIO_MIN + 1,NULL);
+
+
 //    xTaskCreate(test_test, "test_test", 4096, NULL, ESP_TASK_PRIO_MIN + 1, NULL);//????
+    
 
 /*   释放BT mode模式，释放内存   */
     ESP_ERROR_CHECK(esp_bt_controller_mem_release(ESP_BT_MODE_CLASSIC_BT));
