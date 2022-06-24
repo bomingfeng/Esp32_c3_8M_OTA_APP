@@ -20,7 +20,7 @@ void led_instructions(void *pvParam)
     {
         EventBits_t staBits = xEventGroupWaitBits(APP_event_group, APP_event_Standby_BIT | APP_event_run_BIT | APP_event_ir_rx_flags_BIT,\
                                                 pdFALSE,pdFALSE, 500 / portTICK_PERIOD_MS);
-        if (((staBits & APP_event_Standby_BIT) != 0) && (Standby == 0xaa) || ((sleep_keep & sleep_keep_Thermohygrometer_Low_battery_BIT) == sleep_keep_Thermohygrometer_Low_battery_BIT))
+        if ((((staBits & APP_event_Standby_BIT) != 0) && (Standby == 0xaa)) || ((sleep_keep & sleep_keep_Thermohygrometer_Low_battery_BIT) == sleep_keep_Thermohygrometer_Low_battery_BIT))
 		{
             Standby = 0x55;
             ledc_set_duty(ledc_channel[0].speed_mode, ledc_channel[0].channel, 300);
