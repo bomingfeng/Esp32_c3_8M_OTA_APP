@@ -19,6 +19,7 @@
     "freertos.h": "c",
     "freertosconfig.h": "c",
     "message_buffer.h": "c",
-    "event_groups.h": "c"
+    "event_groups.h": "c",
+    "*.inc": "c"
   }
 }

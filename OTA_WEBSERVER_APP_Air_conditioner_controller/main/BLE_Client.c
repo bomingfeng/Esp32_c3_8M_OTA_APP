@@ -14,7 +14,7 @@ MessageBufferHandle_t ble_Voltage;
 
 uint32_t degC_ble = 0;
 uint32_t humidity_ble = 0;
-uint32_t Voltage_ble = 0;
+int32_t Voltage_ble = 0;
 uint8_t con = 0;
 
 extern char * tcprx_buffer;
@@ -134,7 +134,6 @@ static struct gattc_profile_inst gl_profile_tab[PROFILE_NUM] = {
     },
 };
 
-uint8_t ble_batty_low = 0;
 static void gattc_profile_event_handler(esp_gattc_cb_event_t event, esp_gatt_if_t gattc_if, esp_ble_gattc_cb_param_t *param)
 {
     esp_ble_gattc_cb_param_t *p_data = (esp_ble_gattc_cb_param_t *)param;
@@ -347,11 +346,7 @@ static void gattc_profile_event_handler(esp_gattc_cb_event_t event, esp_gatt_if_
                 Voltage_ble += (p_data->notify.value[4] << 8) + p_data->notify.value[3];
                 if(con >= 18)
                 {
-                    if(ble_batty_low == 1)
-                    {
-                        sleep_keep &= ~sleep_keep_Thermohygrometer_Low_battery_BIT;
-                        ble_batty_low = 0;
-                    }
+
                     degC_ble = degC_ble/18;
                     humidity_ble = humidity_ble/18;
                     Voltage_ble = Voltage_ble/18;
@@ -359,14 +354,6 @@ static void gattc_profile_event_handler(esp_gattc_cb_event_t event, esp_gatt_if_
                     printf("temperature:%ddecC,humidity:%d%%,Voltage:%dmV,value_len:%d\r\n",    \
                     degC_ble,humidity_ble,Voltage_ble,p_data->notify.value_len);
                     //printf("----------------------------------------------------\r\n");
-                    if(Voltage_ble <= 2200)
-                    {
-                        sleep_keep |= sleep_keep_Thermohygrometer_Low_battery_BIT;
-                    }
-                    if(Voltage_ble >= 3000)
-                    {
-                        sleep_keep &= ~sleep_keep_Thermohygrometer_Low_battery_BIT;
-                    }
 
                    // BaseType_t xHigherPriorityTaskWoken = pdFALSE; /* Initialised to pdFALSE. */
                     /* Attempt to send the string to the message buffer. */
@@ -606,9 +593,5 @@ void ble_init(void * arg)
     if (local_mtu_ret){
         ESP_LOGE(GATTC_TAG, "set local  MTU failed, error code = %x", local_mtu_ret);
     }
-
-    ble_batty_low = 1;
-    sleep_keep |= sleep_keep_Thermohygrometer_Low_battery_BIT;
-
     vTaskDelete(NULL);
 }

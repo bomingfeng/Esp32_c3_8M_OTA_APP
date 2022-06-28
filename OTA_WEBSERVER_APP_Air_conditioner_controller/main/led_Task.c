@@ -2,6 +2,7 @@
 #include "driver/ledc.h"
 
 extern uint8_t ip_addr1,ip_addr2,ip_addr3,ip_addr4;
+extern int32_t BLe_battery;
 
 #define LEDC_LS_TIMER          LEDC_TIMER_1
 #define LEDC_LS_MODE           LEDC_LOW_SPEED_MODE
@@ -9,23 +10,19 @@ extern uint8_t ip_addr1,ip_addr2,ip_addr3,ip_addr4;
 #define LEDC_LS_CH0_CHANNEL    LEDC_CHANNEL_0
 #define LEDC_LS_CH1_GPIO       (4)
 #define LEDC_LS_CH1_CHANNEL    LEDC_CHANNEL_1
-#define LEDC_LS_CH2_GPIO       (19)
-#define LEDC_LS_CH2_CHANNEL    LEDC_CHANNEL_2
 
-#define LEDC_TEST_CH_NUM       (3)
-#define LEDC_TEST_DUTY         (2)
+#define LEDC_TEST_CH_NUM       (2)
 
 void LED_Task_init(void)
 {
     xEventGroupSetBits(APP_event_group,APP_event_Standby_BIT);
     // Clear the bit
-	xEventGroupClearBits(APP_event_group,APP_event_run_BIT);
+	xEventGroupClearBits(APP_event_group,APP_event_run_BIT | APP_event_IR_LED_flags_BIT);
 }
 
 void led_instructions(void *pvParam)
 {
-    uint8_t con = 0;
-    portMUX_TYPE  test = portMUX_INITIALIZER_UNLOCKED;
+    uint8_t con = 0,Standby,runby;
     uint8_t pcWriteBuffer[2048];
 
     int ch;
@@ -73,59 +70,62 @@ void led_instructions(void *pvParam)
             .hpoint     = 0,
             .timer_sel  = LEDC_LS_TIMER
         },
-        {
-            .channel    = LEDC_LS_CH2_CHANNEL,
-            .duty       = 0,
-            .gpio_num   = LEDC_LS_CH2_GPIO,
-            .speed_mode = LEDC_LS_MODE,
-            .hpoint     = 0,
-            .timer_sel  = LEDC_LS_TIMER
-        },
     };
 
     // Set LED Controller with previously prepared configuration
     for (ch = 0; ch < LEDC_TEST_CH_NUM; ch++) {
         ledc_channel_config(&ledc_channel[ch]);
     }
-
+    Standby = 0xaa;
+    runby = 0xaa;
     while(1) 
     {
         EventBits_t staBits = xEventGroupWaitBits(APP_event_group, APP_event_Standby_BIT | APP_event_run_BIT,\
                                                 pdFALSE,pdFALSE, 100 / portTICK_PERIOD_MS);
-        if ((staBits & APP_event_Standby_BIT) != 0)
+        if ((((staBits & APP_event_Standby_BIT) != 0) && (Standby == 0xaa)) || (BLe_battery <= 2300) || ((staBits & APP_event_IR_LED_flags_BIT) != 0))
 		{
-            ledc_set_duty(ledc_channel[0].speed_mode, ledc_channel[0].channel, LEDC_TEST_DUTY);
+            Standby = 0x55;
+            if((staBits & APP_event_IR_LED_flags_BIT) != 0) 
+            {
+                ledc_set_duty(ledc_channel[0].speed_mode, ledc_channel[0].channel, 500);
+            }
+            else
+            {
+                ledc_set_duty(ledc_channel[0].speed_mode, ledc_channel[0].channel, 4);
+            }
             ledc_update_duty(ledc_channel[0].speed_mode, ledc_channel[0].channel);
+            xEventGroupClearBits(APP_event_group,APP_event_IR_LED_flags_BIT);
         }      
         else
         {
+            Standby = 0xaa;
             ledc_set_duty(ledc_channel[0].speed_mode, ledc_channel[0].channel, 0);
             ledc_update_duty(ledc_channel[0].speed_mode, ledc_channel[0].channel);
         }
 
-        if ((staBits & APP_event_run_BIT) != 0)
+        if ((((staBits & APP_event_run_BIT) != 0) && (runby == 0xaa)) || (((staBits &APP_event_30min_timer_BIT) == 0) && ((staBits & APP_event_run_BIT) != 0)))
 		{
-            ledc_set_duty(ledc_channel[1].speed_mode, ledc_channel[1].channel, LEDC_TEST_DUTY);
+            runby = 0x55;
+            ledc_set_duty(ledc_channel[1].speed_mode, ledc_channel[1].channel, 4);
             ledc_update_duty(ledc_channel[1].speed_mode, ledc_channel[1].channel);
         }      
         else
         {
+            runby = 0xaa;
             ledc_set_duty(ledc_channel[1].speed_mode, ledc_channel[1].channel, 0);
             ledc_update_duty(ledc_channel[1].speed_mode, ledc_channel[1].channel);
         }    
-        vTaskDelay(100 / portTICK_PERIOD_MS);
-        if ((sleep_keep & sleep_keep_Thermohygrometer_Low_battery_BIT) == sleep_keep_Thermohygrometer_Low_battery_BIT)
-		{
-            ledc_set_duty(ledc_channel[2].speed_mode, ledc_channel[2].channel, LEDC_TEST_DUTY);
-            ledc_update_duty(ledc_channel[2].speed_mode, ledc_channel[2].channel);
-        } 
+
+        if(BLe_battery <= 2280)
+        {
+            vTaskDelay(300 / portTICK_PERIOD_MS);
+        }
         else
         {
-            ledc_set_duty(ledc_channel[2].speed_mode, ledc_channel[2].channel, 0);
-            ledc_update_duty(ledc_channel[2].speed_mode, ledc_channel[2].channel);
+            vTaskDelay(1200 / portTICK_PERIOD_MS);
         }
         con++;
-        if(con >= 100)
+        if(con >= 20)
         {
             con = 0;
             tcp_client_send(ip_addr1);

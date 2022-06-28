@@ -39,11 +39,11 @@ void ds18x20_test(void *arg)
                     // printf does not support printing 64-bit values, so we
                     // split it up into two 32-bit integers and print them
                     // back-to-back to make it look like one big hex number.
-                    temp_c = temps[j] * 0.97;
+                    temp_c = temps[j] * 0.93;
                 }
                 degC = degC + ((int)((temp_c + 0.005) * 100));
                 ESP_LOGI("ds18b20", "DS18B20 Sensor reports++ %d deg C\n",degC);
-                vTaskDelay(pdMS_TO_TICKS(5000));
+                vTaskDelay(pdMS_TO_TICKS(65000));
             }
             degC = degC/18;
             printf("DS18B20 Sensor reportsAVG %d deg C\n",degC);

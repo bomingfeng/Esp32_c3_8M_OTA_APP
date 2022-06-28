@@ -19,6 +19,8 @@ EventGroupHandle_t APP_event_group;
 RTC_DATA_ATTR uint32_t sleep_keep;
 RTC_DATA_ATTR uint8_t sleep_ir_data[13];
  
+int32_t BLe_battery = 0; // value will default to 0, if not set yet in NVS
+
 uint8_t ip_addr1 = 0,ip_addr2 = 0,ip_addr3 = 0,ip_addr4 = 0;
 
 extern char * tcprx_buffer;
@@ -97,7 +99,7 @@ void app_main()
 
     tempps_task_init();
     xTaskCreate(IRps_task,"IRps_task",  3072, NULL, ESP_TASK_PRIO_MIN + 2,NULL);
-    xTaskCreate(tempps_task,"tempps",  3072, NULL, ESP_TASK_PRIO_MIN + 1,NULL);
+    xTaskCreate(tempps_task,"tempps",  4096, NULL, ESP_TASK_PRIO_MIN + 1,NULL);
 
 
 //    xTaskCreate(test_test, "test_test", 4096, NULL, ESP_TASK_PRIO_MIN + 1, NULL);//????

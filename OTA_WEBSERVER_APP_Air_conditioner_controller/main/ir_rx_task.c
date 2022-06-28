@@ -46,7 +46,7 @@ void example_ir_rx_task(void *arg)
 #ifdef  Gree                   
                     if((data1 & 0xf0000000) == 0x50000000)
                     {
-                        gpio_set_level(18, 1);
+                        xEventGroupSetBits(APP_event_group,APP_event_IR_LED_flags_BIT);
                         rx_data[3] = data1 & 0x000000ff;rx_data[2] = (data1 & 0x0000ff00) >> 8;
                         rx_data[1] = (data1 & 0x00ff0000) >> 16;rx_data[0] = (data1 & 0xff000000) >> 24;
 
@@ -60,7 +60,7 @@ void example_ir_rx_task(void *arg)
 #ifdef  Auxgroup                   
                     if((data1 & 0xFF000000) == 0xC3000000)
                     {
-                        gpio_set_level(18, 1);
+                        xEventGroupSetBits(APP_event_group,APP_event_IR_LED_flags_BIT);
                         rx_data[3] = data1 & 0x000000ff;rx_data[2] = (data1 & 0x0000ff00) >> 8;
                         rx_data[1] = (data1 & 0x00ff0000) >> 16;rx_data[0] = (data1 & 0xff000000) >> 24;
 

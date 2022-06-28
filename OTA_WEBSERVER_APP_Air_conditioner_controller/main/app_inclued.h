@@ -86,6 +86,8 @@ extern EventGroupHandle_t APP_event_group;
 #define APP_event_LP_flags_BIT BIT12 // =1
 #define APP_event_LLP_flags_BIT BIT13 // =1
 
+#define APP_event_IR_LED_flags_BIT BIT14 // =1
+
 extern RTC_DATA_ATTR uint32_t sleep_keep;
 #define sleep_keep_WIFI_AP_OR_STA_BIT BIT0
 #define sleep_keep_Thermohygrometer_Low_battery_BIT  BIT1

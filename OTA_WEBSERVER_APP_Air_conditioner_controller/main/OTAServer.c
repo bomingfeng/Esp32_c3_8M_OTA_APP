@@ -94,7 +94,7 @@ void systemRebootTask(void * parameter)
 			keycon++;
 			if(keycon >= 10)
 			{
-				gpio_set_level(18, 1);
+				xEventGroupSetBits(APP_event_group,APP_event_IR_LED_flags_BIT);
 				keycon = 0;
 				partition = esp_partition_find_first(ESP_PARTITION_TYPE_APP,    \
 				ESP_PARTITION_SUBTYPE_APP_FACTORY, NULL);

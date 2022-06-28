@@ -10,6 +10,10 @@ extern MessageBufferHandle_t esp32degC; //换算2831 = 28.31
 extern MessageBufferHandle_t ir_tx_data;
 extern MessageBufferHandle_t ir_rx_data;
 extern RTC_DATA_ATTR uint8_t sleep_ir_data[13];
+
+extern int32_t BLe_battery;
+extern nvs_handle_t app_data;
+
 MessageBufferHandle_t IRPS_temp;
 
 TimerHandle_t xTimers0,xTimers1,xTimers2,io_sleep_timers,time_sleep_timers;
@@ -172,7 +176,6 @@ void IRps_task(void *arg)
             {
                 sleep_ir_data[i] =  ir_ps_data[i];
             }
-            gpio_set_level(18, 0);
             if((ir_ps_data[3] & 0x08) == 0x08)    //判断是否开空调，开
             {
                 xTimerStop(io_sleep_timers,portMAX_DELAY);  //关掉待机休眠定时器
@@ -202,40 +205,40 @@ void IRps_task(void *arg)
                 switch (IR_temp)
                 {
                     case 0:
-                        IR_temp = 2690; //1600
+                        IR_temp = 2650; //1600
                         break;
                     case 1:
-                        IR_temp = 2690; //1700
+                        IR_temp = 2650; //1700
                         break;
                     case 2:
-                        IR_temp = 2690; //1800
+                        IR_temp = 2650; //1800
                         break;
                     case 3:
-                        IR_temp = 2690; //1900
+                        IR_temp = 2650; //1900
                         break;
                     case 4:
-                        IR_temp = 2690; //2000
+                        IR_temp = 2650; //2000
                         break;
                     case 5:
-                        IR_temp = 2690; //2100
+                        IR_temp = 2650; //2100
                         break;
                     case 6:
-                        IR_temp = 2690; //2200
+                        IR_temp = 2650; //2200
                         break;
                     case 7:
-                        IR_temp = 2690;
+                        IR_temp = 2650;
                         break;
                     case 8:
-                        IR_temp = 2690;
+                        IR_temp = 2650;
                         break;
                     case 9:
-                        IR_temp = 2690;
+                        IR_temp = 2650;
                         break;
                     case 10:
-                        IR_temp = 2690;
+                        IR_temp = 2650;
                         break;
                     case 11:
-                        IR_temp = 2730;
+                        IR_temp = 2700;
                         break;
                     case 12:
                         IR_temp = 2800;
@@ -299,7 +302,6 @@ void IRps_task(void *arg)
             {
                 sleep_ir_data[i] =  ir_ps_data[i];
             }
-            gpio_set_level(18, 0);
             if((ir_ps_data[9] & 0x04) == 0x04)    //判断是否开空调，开
             {
                 xTimerStop(io_sleep_timers,portMAX_DELAY);  //关掉待机休眠定时器
@@ -490,7 +492,7 @@ void tempps_task(void *arg)
     uint8_t ir_ps_data[13];
     uint32_t bleC = 0;  //换算2831 = 28.31
     uint32_t humidity_ble = 0;
-    uint32_t Voltage_ble = 0;
+    int32_t Voltage_ble = 0;
     uint32_t ds18b20C;   //换算2831 = 28.31
     uint32_t esp32C = 0; //换算2831 = 28.31
     uint32_t IR_temp = 2800;
@@ -519,11 +521,42 @@ void tempps_task(void *arg)
         xMessageBufferReceive(ble_degC,&bleC,4,100/portTICK_PERIOD_MS);
         xMessageBufferReceive(esp32degC,&esp32C,4,100/portTICK_PERIOD_MS);
         
+        if(Voltage_ble != BLe_battery)
+        {
+            BLe_battery = Voltage_ble;
+            // Open
+            printf("\n");
+            printf("Opening Non-Volatile Storage (NVS) handle... ");
+            esp_err_t err = nvs_open("storage", NVS_READWRITE, &app_data);
+            if (err != ESP_OK) 
+            {
+            printf("Error (%s) opening NVS handle!\n", esp_err_to_name(err));
+            }
+            else 
+            {
+                printf("Done\n");
+                // Write
+                printf("Updating restart counter in NVS ... ");
+                err = nvs_set_i32(app_data, "BLe_battery", BLe_battery);
+                printf((err != ESP_OK) ? "Failed!\n" : "Done\n");
+
+                // Commit written value.
+                // After setting any values, nvs_commit() must be called to ensure changes are written
+                // to flash storage. Implementations may write to storage at other times,
+                // but this is not guaranteed.
+                printf("Committing updates in NVS ... ");
+                err = nvs_commit(app_data);
+                printf((err != ESP_OK) ? "Failed!\n" : "Done\n");
+            }
+            // Close
+            nvs_close(app_data);
+        }
+
         EventBits_t staBits = xEventGroupWaitBits(APP_event_group,APP_event_run_BIT | APP_event_30min_timer_BIT,\
                                                 pdFALSE,pdTRUE,100/portTICK_PERIOD_MS);
         if((staBits & (APP_event_run_BIT | APP_event_30min_timer_BIT)) == (APP_event_run_BIT | APP_event_30min_timer_BIT))
         {
-            if ((sleep_keep & sleep_keep_Thermohygrometer_Low_battery_BIT) == sleep_keep_Thermohygrometer_Low_battery_BIT)
+            if(BLe_battery <= 2280)
             {
                 if((ds18b20C <= esp32C) && (ds18b20C >= (IR_temp + Sp)) && ((xEventGroupGetBits(APP_event_group)  & APP_event_SP_flags_BIT) == 0))
                 {
