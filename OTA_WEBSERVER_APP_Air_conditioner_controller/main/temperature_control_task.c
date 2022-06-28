@@ -13,6 +13,7 @@ extern RTC_DATA_ATTR uint8_t sleep_ir_data[13];
 
 extern int32_t BLe_battery;
 extern nvs_handle_t app_data;
+extern nvs_handle_t test_handle;
 
 MessageBufferHandle_t IRPS_temp;
 
@@ -492,12 +493,15 @@ void tempps_task(void *arg)
     uint8_t ir_ps_data[13];
     uint32_t bleC = 0;  //换算2831 = 28.31
     uint32_t humidity_ble = 0;
-    int32_t Voltage_ble = 0;
+    int32_t Voltage_ble = 2500;
     uint32_t ds18b20C;   //换算2831 = 28.31
     uint32_t esp32C = 0; //换算2831 = 28.31
     uint32_t IR_temp = 2800;
     uint8_t send_flags = 0x55;
-    uint8_t i = 0;
+    uint8_t i = 0,VoltageL,VoltageH;
+    VoltageL = 0xaa;
+    VoltageH = 0xaa;
+    Voltage_ble = 2500;
     while(1)
     {
         xMessageBufferReceive(IRPS_temp,&IR_temp,4,100/portTICK_PERIOD_MS);
@@ -521,9 +525,18 @@ void tempps_task(void *arg)
         xMessageBufferReceive(ble_degC,&bleC,4,100/portTICK_PERIOD_MS);
         xMessageBufferReceive(esp32degC,&esp32C,4,100/portTICK_PERIOD_MS);
         
-        if(Voltage_ble != BLe_battery)
+        if(((Voltage_ble != BLe_battery) && (Voltage_ble <= 2300) && (VoltageL == 0xaa)) || ((Voltage_ble != BLe_battery) && (Voltage_ble >= 2800) && (VoltageH == 0xaa)))
         {
+            if(Voltage_ble <= 2300)
+            {
+                VoltageL = 0x55;
+            }
+            if(Voltage_ble >= 2800)
+            {
+                VoltageH = 0x55;
+            }
             BLe_battery = Voltage_ble;
+            
             // Open
             printf("\n");
             printf("Opening Non-Volatile Storage (NVS) handle... ");

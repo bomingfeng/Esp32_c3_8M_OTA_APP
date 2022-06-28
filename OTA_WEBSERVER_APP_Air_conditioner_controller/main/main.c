@@ -19,7 +19,8 @@ EventGroupHandle_t APP_event_group;
 RTC_DATA_ATTR uint32_t sleep_keep;
 RTC_DATA_ATTR uint8_t sleep_ir_data[13];
  
-int32_t BLe_battery = 0; // value will default to 0, if not set yet in NVS
+int32_t BLe_batter; // value will default to 0, if not set yet in NVS
+int32_t test_data;
 
 uint8_t ip_addr1 = 0,ip_addr2 = 0,ip_addr3 = 0,ip_addr4 = 0;
 
