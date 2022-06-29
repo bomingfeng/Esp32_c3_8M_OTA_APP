@@ -1,10 +1,12 @@
 #include "ir_rx_task.h"
+#include "driver/ledc.h"
 
 rmt_channel_t example_rx_channel = RMT_CHANNEL_2;
 MessageBufferHandle_t ir_rx_data;
 
 extern char * tcprx_buffer;
 extern MessageBufferHandle_t tcp_send_data;
+extern ledc_channel_config_t ledc_channel[];
 
 void ir_rx_task_init(void)
 {
@@ -46,13 +48,16 @@ void example_ir_rx_task(void *arg)
 #ifdef  Gree                   
                     if((data1 & 0xf0000000) == 0x50000000)
                     {
-                        xEventGroupSetBits(APP_event_group,APP_event_IR_LED_flags_BIT);
+                        
                         rx_data[3] = data1 & 0x000000ff;rx_data[2] = (data1 & 0x0000ff00) >> 8;
                         rx_data[1] = (data1 & 0x00ff0000) >> 16;rx_data[0] = (data1 & 0xff000000) >> 24;
 
                         rx_data[7] = data2 & 0x000000ff;rx_data[6] = (data2 & 0x0000ff00) >> 8;
                         rx_data[5] = (data2 & 0x00ff0000) >> 16;rx_data[4] = (data2 & 0xff000000) >> 24;
                         xMessageBufferSend(ir_rx_data,rx_data,13,portMAX_DELAY);
+                        xEventGroupSetBits(APP_event_group,APP_event_IR_LED_flags_BIT);
+                        ledc_set_duty(ledc_channel[0].speed_mode, ledc_channel[0].channel, 500);
+                        ledc_update_duty(ledc_channel[0].speed_mode, ledc_channel[0].channel);
                         printf("ir ok\r\n");
                     }
 #endif
@@ -60,7 +65,6 @@ void example_ir_rx_task(void *arg)
 #ifdef  Auxgroup                   
                     if((data1 & 0xFF000000) == 0xC3000000)
                     {
-                        xEventGroupSetBits(APP_event_group,APP_event_IR_LED_flags_BIT);
                         rx_data[3] = data1 & 0x000000ff;rx_data[2] = (data1 & 0x0000ff00) >> 8;
                         rx_data[1] = (data1 & 0x00ff0000) >> 16;rx_data[0] = (data1 & 0xff000000) >> 24;
 
@@ -72,6 +76,9 @@ void example_ir_rx_task(void *arg)
 
                         rx_data[12] = (data4 & 0xff000000) >> 24;
                         xMessageBufferSend(ir_rx_data,rx_data,13,portMAX_DELAY);
+                        xEventGroupSetBits(APP_event_group,APP_event_IR_LED_flags_BIT);
+                        ledc_set_duty(ledc_channel[0].speed_mode, ledc_channel[0].channel, 500);
+                        ledc_update_duty(ledc_channel[0].speed_mode, ledc_channel[0].channel);
                         printf("ir ok\r\n");
                     }
 #endif

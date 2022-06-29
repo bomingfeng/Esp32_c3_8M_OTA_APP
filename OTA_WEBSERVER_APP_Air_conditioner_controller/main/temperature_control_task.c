@@ -1,4 +1,5 @@
 #include "temperature_control_task.h"
+#include "driver/ledc.h"
 
 extern char * tcprx_buffer;
 extern MessageBufferHandle_t tcp_send_data;
@@ -14,6 +15,8 @@ extern RTC_DATA_ATTR uint8_t sleep_ir_data[13];
 extern int32_t BLe_battery;
 extern nvs_handle_t app_data;
 extern nvs_handle_t test_handle;
+
+extern ledc_channel_config_t ledc_channel[];
 
 MessageBufferHandle_t IRPS_temp;
 
@@ -177,6 +180,8 @@ void IRps_task(void *arg)
             {
                 sleep_ir_data[i] =  ir_ps_data[i];
             }
+            ledc_set_duty(ledc_channel[0].speed_mode, ledc_channel[0].channel, 0);
+            ledc_update_duty(ledc_channel[0].speed_mode, ledc_channel[0].channel);
             if((ir_ps_data[3] & 0x08) == 0x08)    //判断是否开空调，开
             {
                 xTimerStop(io_sleep_timers,portMAX_DELAY);  //关掉待机休眠定时器
@@ -303,6 +308,8 @@ void IRps_task(void *arg)
             {
                 sleep_ir_data[i] =  ir_ps_data[i];
             }
+            ledc_set_duty(ledc_channel[0].speed_mode, ledc_channel[0].channel, 0);
+            ledc_update_duty(ledc_channel[0].speed_mode, ledc_channel[0].channel);
             if((ir_ps_data[9] & 0x04) == 0x04)    //判断是否开空调，开
             {
                 xTimerStop(io_sleep_timers,portMAX_DELAY);  //关掉待机休眠定时器

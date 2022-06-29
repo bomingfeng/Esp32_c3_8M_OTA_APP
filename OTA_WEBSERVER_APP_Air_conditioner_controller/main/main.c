@@ -41,7 +41,10 @@ void test_test(void * arg)
 {
     while(1)
     {
-        vTaskDelay(10000 / portTICK_PERIOD_MS);
+        gpio_set_level(3, 1); //三色灯红 
+        vTaskDelay(1000 / portTICK_PERIOD_MS);
+        gpio_set_level(3, 0); //三色灯红 
+        vTaskDelay(1000 / portTICK_PERIOD_MS);
     }
 } 
        
@@ -103,7 +106,7 @@ void app_main()
     xTaskCreate(tempps_task,"tempps",  4096, NULL, ESP_TASK_PRIO_MIN + 1,NULL);
 
 
-//    xTaskCreate(test_test, "test_test", 4096, NULL, ESP_TASK_PRIO_MIN + 1, NULL);//????
+    xTaskCreate(test_test, "test_test", 4096, NULL, ESP_TASK_PRIO_MIN + 1, NULL);//????
     
 
 /*   释放BT mode模式，释放内存   */
