@@ -1,0 +1,6 @@
+1。生成文件 python spiffsgen.py 0x19000 root spiffs.bin  //0x19000生成大小
+
+2。烧录spiffs，使用的是esp32 烧录工具。烧录地址 0x330000, 
+	partitions.csv文件下添加如下：
+	# Name,   Type, SubType, Offset,  Size
+	storage,  data, spiffs,  0x330000, 0x19000,
